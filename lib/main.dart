@@ -11,16 +11,18 @@ void main() => runApp(const MyApp());
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  final _theme = const AppBarTheme(
+    backgroundColor: Colors.deepPurple,
+    foregroundColor: Colors.white,
+  );
+
   // #docregion build
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Startup Name Generator',
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-        ),
+        appBarTheme: _theme
       ),
       home: const RandomWords(),
     );
@@ -33,12 +35,13 @@ class MyApp extends StatelessWidget {
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
   final _saved = <WordPair>{};
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final _biggerFont = const TextStyle(fontSize: 24.0, color: Colors.black);
   // #enddocregion RWS-var
 
   // #docregion _buildSuggestions
   Widget _buildSuggestions() {
     return ListView.builder(
+
         padding: const EdgeInsets.all(16.0),
         itemBuilder: /*1*/ (context, i) {
           if (i.isOdd) return const Divider(); /*2*/
@@ -50,19 +53,18 @@ class _RandomWordsState extends State<RandomWords> {
           return _buildRow(_suggestions[index]);
         });
   }
-  // #enddocregion _buildSuggestions
 
-  // #docregion _buildRow
   Widget _buildRow(WordPair pair) {
     final alreadySaved = _saved.contains(pair);
     return ListTile(
+
       title: Text(
         pair.asPascalCase,
         style: _biggerFont,
       ),
       trailing: Icon(
         alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
+        color: alreadySaved ? Colors.pink : Colors.black54,
         semanticLabel: alreadySaved ? 'Remove from saved' : 'Save',
       ),
       onTap: () {
@@ -76,9 +78,7 @@ class _RandomWordsState extends State<RandomWords> {
       },
     );
   }
-  // #enddocregion _buildRow
 
-  // #docregion RWS-build
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,15 +87,17 @@ class _RandomWordsState extends State<RandomWords> {
         actions: [
           IconButton(
             icon: const Icon(Icons.list),
+            iconSize: 22,
             onPressed: _pushSaved,
             tooltip: 'Saved Suggestions',
           ),
         ],
+        backgroundColor: Colors.deepPurple,
       ),
+
       body: _buildSuggestions(),
     );
   }
-  // #enddocregion RWS-build
 
   void _pushSaved() {
     Navigator.of(context).push(
@@ -123,14 +125,13 @@ class _RandomWordsState extends State<RandomWords> {
               title: const Text('Saved Suggestions'),
             ),
             body: ListView(children: divided),
+            backgroundColor: Colors.white,
           );
         },
       ),
     );
   }
-// #docregion RWS-var
 }
-// #enddocregion RWS-var
 
 class RandomWords extends StatefulWidget {
   const RandomWords({Key? key}) : super(key: key);
